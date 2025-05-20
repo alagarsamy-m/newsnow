@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "628901071122",
+    "project_id": "newsapp-2ef03",
+    "storage_bucket": "newsapp-2ef03.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:628901071122:android:7d920c37cbd1a134bf4bcb",
+        "android_client_info": {
+          "package_name": "com.example.news_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5rRzo01OaipOkpiKpc6Oungeicjd4pNM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
