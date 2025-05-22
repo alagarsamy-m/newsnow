@@ -11,7 +11,7 @@ class SubscriptionPromptScreen extends StatefulWidget {
 
 class _SubscriptionPromptScreenState extends State<SubscriptionPromptScreen> {
   final List<String> _categories = ['General', 'Sports', 'Technology', 'Health', 'Business'];
-  final Set<String> _selectedCategories = {};
+  Set<String> _selectedCategories = {};
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final User? _user = FirebaseAuth.instance.currentUser;
@@ -44,14 +44,32 @@ class _SubscriptionPromptScreenState extends State<SubscriptionPromptScreen> {
         Map.fromIterable(_selectedCategories, key: (e) => e, value: (e) => true),
         SetOptions(merge: true),
       );
-      Navigator.of(context).pop();
+      // Pop back to main user screen instead of pushReplacementNamed to preserve navigation stack
+      Navigator.of(context).pop(_selectedCategories);
     } catch (e) {
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(content: Text('Failed to save subscriptions: \$e')),
-      // );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save subscriptions: $e')),
+      );
     } finally {
       setState(() {
         _isSaving = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCurrentSubscriptions();
+  }
+
+  Future<void> _loadCurrentSubscriptions() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+    final doc = await FirebaseFirestore.instance.collection('subscriptions').doc(user.uid).get();
+    if (doc.exists && doc.data() != null) {
+      setState(() {
+        _selectedCategories = doc.data()!.keys.toSet();
       });
     }
   }
